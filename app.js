@@ -7,7 +7,7 @@ const clearButton = document.querySelector("#clear-todos");
 todoForm.addEventListener("submit", addTodo);
 todoList.addEventListener("click", deleteTodo);
 clearButton.addEventListener("click", clearTodos);
-filterInput.addEventListener("click", filterTodos);
+filterInput.addEventListener("keyup", filterTodos);
 
 function addTodo(e) {
     e.preventDefault();
@@ -16,7 +16,7 @@ function addTodo(e) {
     const li = document.createElement("li")
 
     // memnambahkan class pada element li 
-    li.className = "list-group-item d-flex justify-content-between align-items-center mb-1";
+    li.className = "todo-item list-group-item d-flex justify-content-between align-items-center mb-1";
 
     // menambahkan children ke dalam element li 
     li.appendChild(document.createTextNode(todoInput.value));
@@ -52,7 +52,22 @@ function deleteTodo(e) {
     }
 }
 
-function clearTodos(e){
+function clearTodos(){
     todoList.innerHTML =""
+}
+
+function filterTodos(e) {
+    const filterText = e.target.value.toLowerCase();
+    const todoItems = document.querySelectorAll(".todo-item");
+
+    todoItems.forEach((item) => {
+        const itemText = item.firstChild.textContent.toLowerCase();
+        if (itemText.indexOf(filterText) !== -1) {
+            item.setAttribute("style", "display: block;");
+        } else {
+            item.setAttribute("style", "display: none !important;");
+        }
+        console.log(itemText);
+    });
 }
 
