@@ -55,3 +55,4 @@ function deleteTodo(e) {
 function clearTodos(e){
     todoList.innerHTML =""
 }
+
