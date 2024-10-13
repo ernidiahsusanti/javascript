@@ -1,14 +1,19 @@
+
+// kumpulan ui element
 const todoForm = document.querySelector("#todo-form");
 const todoInput = document.querySelector("#todo-input");
 const filterInput = document.querySelector("#filter-input");
 const todoList = document.querySelector("#todo-list");
 const clearButton = document.querySelector("#clear-todos");
 
+// kumpulan event listener
 todoForm.addEventListener("submit", addTodo);
 todoList.addEventListener("click", deleteTodo);
 clearButton.addEventListener("click", clearTodos);
 filterInput.addEventListener("keyup", filterTodos);
 
+
+// kumpulan DOM Function
 function addTodo(e) {
     e.preventDefault();
     if (todoInput.value ){
@@ -33,11 +38,25 @@ function addTodo(e) {
     // memasukan elemen li yang telah dibuat dengan javascript
     // kedalam element todolist
     todoList.appendChild(li)
-    todoInput.value = "";
+   
 
+    addTodoLocalStorage(todoInput.value);
+    todoInput.value = "";
 } else {
     alert("silahkan tulis sebuah kalimat/pesan")
 }
+}
+
+function addTodoLocalStorage(todoInputValue){
+    let todos;
+    if (localStorage.getItem("todos")== null){
+        todos = [];
+    }else{
+        todos = JSON .parse(localStorage.getItem("todos"));
+    }
+    todos.push(todoInputValue)
+    localStorage.setItem("todos", JSON.stringify(todos));
+
 }
 
 function deleteTodo(e) {
