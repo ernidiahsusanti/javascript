@@ -24,7 +24,33 @@ function ImmediateLoadEventListener(){
 }
 
 
-function getTodos(){
+// reuesable code 
+function createTodoElement(value){
+       // membuat li element
+       const li = document.createElement("li")
+
+       // memnambahkan class pada element li 
+       li.className = "todo-item list-group-item d-flex justify-content-between align-items-center mb-1";
+   
+       // menambahkan children ke dalam element li 
+       li.appendChild(document.createTextNode(value));
+   
+       // membuat delete bautton 
+       const a = document.createElement("a");
+       a.href = "#";
+       a.className = "badge badge-danger delete-todo"
+       a.innerHTML= ("Delete");
+   
+       // menyelipkan element a ke dalam element li
+       li.appendChild(a);
+       
+       // memasukan elemen li yang telah dibuat dengan javascript
+       // kedalam element todolist
+       todoList.appendChild(li)
+
+}
+
+function getItemFromLocalStorage(){
     let todos;
     if (localStorage.getItem("todos")== null){
         todos = [];
@@ -32,74 +58,33 @@ function getTodos(){
         todos = JSON.parse(localStorage.getItem("todos"));
     }
 
+    return todos;
+
+}
+
+function getTodos(){
+    const todos = getItemFromLocalStorage();
+
     todos.forEach((todo)=>{
-        // membuat li element
-    const li = document.createElement("li")
-
-    // memnambahkan class pada element li 
-    li.className = "todo-item list-group-item d-flex justify-content-between align-items-center mb-1";
-
-    // menambahkan children ke dalam element li 
-    li.appendChild(document.createTextNode(todo));
-
-    // membuat delete bautton 
-    const a = document.createElement("a");
-    a.href = "#";
-    a.className = "badge badge-danger delete-todo"
-    a.innerHTML= ("Delete");
-
-    // menyelipkan element a ke dalam element li
-    li.appendChild(a);
-    
-    // memasukan elemen li yang telah dibuat dengan javascript
-    // kedalam element todolist
-    todoList.appendChild(li)
+        createTodoElement(todo)
 
     })
 }
-
-
 // kumpulan DOM Function
 function addTodo(e) {
     e.preventDefault();
     if (todoInput.value ){
-    // membuat li element
-    const li = document.createElement("li")
+        createTodoElement(todoInput.value);
 
-    // memnambahkan class pada element li 
-    li.className = "todo-item list-group-item d-flex justify-content-between align-items-center mb-1";
-
-    // menambahkan children ke dalam element li 
-    li.appendChild(document.createTextNode(todoInput.value));
-
-    // membuat delete bautton 
-    const a = document.createElement("a");
-    a.href = "#";
-    a.className = "badge badge-danger delete-todo"
-    a.innerHTML= ("Delete");
-
-    // menyelipkan element a ke dalam element li
-    li.appendChild(a);
-    
-    // memasukan elemen li yang telah dibuat dengan javascript
-    // kedalam element todolist
-    todoList.appendChild(li)
-   
-
-    addTodoLocalStorage(todoInput.value);
-    todoInput.value = "";
+        addTodoLocalStorage(todoInput.value);
+        todoInput.value = "";
 } else {
     alert("silahkan tulis sebuah kalimat/pesan")
 }
 }
 // membuat local storage agar tulisan tersimpan di local. 
 function addTodoLocalStorage(todoInputValue){
-    let todos;
-    if (localStorage.getItem("todos")== null){
-        todos = [];
-    }else{
-        todos = JSON .parse(localStorage.getItem("todos"));
-    }
+    const todos = getItemFromLocalStorage();
     todos.push(todoInputValue)
     localStorage.setItem("todos", JSON.stringify(todos));
 
