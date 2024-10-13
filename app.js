@@ -7,10 +7,56 @@ const todoList = document.querySelector("#todo-list");
 const clearButton = document.querySelector("#clear-todos");
 
 // kumpulan event listener
-todoForm.addEventListener("submit", addTodo);
-todoList.addEventListener("click", deleteTodo);
-clearButton.addEventListener("click", clearTodos);
-filterInput.addEventListener("keyup", filterTodos);
+ImmediateLoadEventListener();
+
+function ImmediateLoadEventListener(){
+
+    // mendapatkan todos dari localstorage dan memunculkannya di browser.
+    document.addEventListener("DOMContentLoaded", getTodos);
+    // ini adalah event untuk menambah todos
+    todoForm.addEventListener("submit", addTodo);
+    // ini adalah event untuk mengahpus satu todos
+    todoList.addEventListener("click", deleteTodo);
+    // ini adalah event untuk mengahpus semua todos
+    clearButton.addEventListener("click", clearTodos);
+    // ini adalah events untuk memfilter todos
+    filterInput.addEventListener("keyup", filterTodos);
+}
+
+
+function getTodos(){
+    let todos;
+    if (localStorage.getItem("todos")== null){
+        todos = [];
+    }else{
+        todos = JSON.parse(localStorage.getItem("todos"));
+    }
+
+    todos.forEach((todo)=>{
+        // membuat li element
+    const li = document.createElement("li")
+
+    // memnambahkan class pada element li 
+    li.className = "todo-item list-group-item d-flex justify-content-between align-items-center mb-1";
+
+    // menambahkan children ke dalam element li 
+    li.appendChild(document.createTextNode(todo));
+
+    // membuat delete bautton 
+    const a = document.createElement("a");
+    a.href = "#";
+    a.className = "badge badge-danger delete-todo"
+    a.innerHTML= ("Delete");
+
+    // menyelipkan element a ke dalam element li
+    li.appendChild(a);
+    
+    // memasukan elemen li yang telah dibuat dengan javascript
+    // kedalam element todolist
+    todoList.appendChild(li)
+
+    })
+}
 
 
 // kumpulan DOM Function
@@ -46,7 +92,7 @@ function addTodo(e) {
     alert("silahkan tulis sebuah kalimat/pesan")
 }
 }
-
+// membuat local storage agar tulisan tersimpan di local. 
 function addTodoLocalStorage(todoInputValue){
     let todos;
     if (localStorage.getItem("todos")== null){
